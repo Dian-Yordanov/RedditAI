@@ -1,0 +1,90 @@
+{
+"reddit-tech": {
+    "cssClass": "orange",
+    "urls": [
+      "https://www.reddit.com/domain/microsoft.com/.rss",
+      "https://www.reddit.com/r/InternetIsBeautiful/.rss"
+    ]
+  },
+  "unethical-source": {
+    "cssClass": "red",
+    "urls": [
+      "http://feeds.feedburner.com/TechCrunch/"
+    ]
+  },
+  "Visual-news": {
+    "cssClass": "green",
+    "urls": [
+      "http://feeds.feedburner.com/visualcapitalist"
+    ]
+  },
+ "---^Tech^---": {
+   "cssClass": "custom2",
+   "urls": [
+      "http://feeds.feedburner.com/tnwdesign",
+     "https://www.smashingmagazine.com/feed/",
+     "http://feeds.feedburner.com/alistapart/main",
+     "https://www.wired.com/feed",
+     "https://waxy.org/feed/",
+     "https://www.infoworld.com/index.rss",
+     "https://www.deepdotweb.com/feed/",
+     "https://feed.infoq.com/",
+     "https://planetpython.org/rss20.xml",
+     "http://www.creativeapplications.net/feed/",
+     "http://feeds.feedburner.com/linuxjournalcom?format=xml",
+     "http://feeds.feedburner.com/24thfloor?format=xml",
+     "http://feeds.feedburner.com/betalist?format=xml",
+     "http://www.codersnotes.com/notes/feed",
+     "http://www.codersnotes.com/stories/feed",
+     "http://karpathy.github.io/feed.xml",
+     "http://feeds.feedburner.com/teamtreehouse",
+     "http://feeds.feedburner.com/CssTricks",
+    "https://www.reddit.com/r/somethingimade+longtext+programming+PhilosophyofScience+cogsci+startups+math+compsci+SomebodyMakeThis+browsers+gamedev+shamelessplug+Freethought+reverseengineering+netsec+javascript/.rss",
+     "http://feeds.feedburner.com/TheNextWeb",
+     "https://www.cnet.com/rss/news/",
+     "http://feeds.feedburner.com/TechCrunch/",
+     "https://www.oneangrygamer.net/feed/",
+     "https://www.oneangrygamer.net/category/news/industry-news/feed/",
+     "https://www.oneangrygamer.net/category/news/feed/",
+     "http://christophe.rhodes.io/notes/blog/index.rss",
+     "https://thefutureprimaeval.net/rss/",
+     "https://www.reddit.com/r/gnu/new/.rss",
+     "https://www.theguardian.com/uk/technology/rss",
+     "https://www.eff.org/rss/updates.xml",
+     "https://stallman.org/rss/rss.xml",
+     "https://www.reddit.com/r/stallmanwasright/new/.rss",
+     "https://www.reddit.com/r/linux/new/.rss",
+     "https://level1techs.com/podcasts/feed",
+     "https://www.pcper.com/rss.xml",
+     "https://www.eetimes.com/rss_simple.asp",
+     "https://www.semiwiki.com/forum/external.php?type=RSS2",
+     "https://fuse.wikichip.org/feed/",
+     "https://www.phoronix.com/rss.php",
+     "https://www.hardocp.com/RSS/all_hardocp.xml",
+     "https://techreport.com/articles.rss",
+     "https://techreport.com/podcast_mp3.rss",
+     "https://techreport.com/news.rss",
+     "https://feeds.feedburner.com/VideoCardzcom",
+     "https://wccftech.com/feed/",
+     "https://liliputing.com/feed",
+     "https://daringfireball.net/feeds/main",
+     "http://redpanels.com/rss/redpanelsRSS.xml",
+          "https://droid-life.com/wp-content/cache/page_enhanced/www.droid-life.com/feed/_index.xml",
+     "https://www.bleepingcomputer.com/feed/",
+     "http://syndication.thedailywtf.com/TheDailyWtf",
+     "https://news.ycombinator.com/rss",
+     "http://feeds.feedburner.com/bigthink/main"
+   ]
+ },
+ "gaming": {
+   "cssClass": "redcustom2",
+   "urls": [
+     "http://www.channelfireball.com/feed/",
+     "https://www.trp.red/podxml.php"
+   ]
+ }
+}
+
+
+
+

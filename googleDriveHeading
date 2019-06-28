@@ -1,0 +1,8 @@
+-----------------------------------------------------------------
+ ╦╗╔═╗  ╔╗╔╔═╗╔╦╗  ╦╗╔═╗╦  ╔═╗╔╦╗╔═╗
+║║║ ║  ║║║║ ║ ║   ║║║╣ ║  ║╣  ║ ║╣ 
+ ╩╝╚═╝  ╝╚╝╚═╝ ╩   ╩╝╚═╝╩═╝╚═╝ ╩ ╚═╝
+If the html text scraping by tag does not work, the bot will try to use the deprecated pastebin method from https://pastebin.com/raw/n8aCxq1F
+Everyone should be able to edit this file with no filters or censorship. Because of that I cannot be held liable for the content of the file or the content of the links. 
+The rest of this text should be in the form of json with a main json object containing smaller json objects that are used for tags. Each json object used for tagging has 2 pairs: 1 is a string pair used for colours, and the other is the json array with the links or the specific tag.  
+-----------------------------------------------------------------
