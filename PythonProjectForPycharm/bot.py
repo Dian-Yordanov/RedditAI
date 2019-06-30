@@ -5,6 +5,7 @@ import time
 import json
 import html
 import sys
+import urllib
 from collections import defaultdict
 from subprocess import check_call
 # import pip3
@@ -359,6 +360,7 @@ def main(threadName, waitTime):
 
             data = get_data_from_all_google_sources(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10)
 
+            # print(source1)
             # print(data)
 
             x = 0
@@ -417,7 +419,7 @@ def main(threadName, waitTime):
             # print("success111")
             s = str(e)
             indexExistingCheckBoolean = False
-            print('EXCEPTION1                                                                                ')
+            print('EXCEPTION2                                                                                ')
             print(s)
             pass
 
@@ -427,8 +429,11 @@ def GetJsonData(google_url):
         # print("urls source 1")
         gddc = GoogleDriveDownloadClass
         returned_string_with_the_whole_html = gddc(google_url).get_downloaded_string()
-        returned_string_with_the_whole_html = returned_string_with_the_whole_html.replace("\\\\n", "").replace("\\\"",
-                                                                                                               "\"")
+        returned_string_with_the_whole_html = ManialUnicodeToStringConverter(returned_string_with_the_whole_html)
+        # print(returned_string_with_the_whole_html)
+        returned_string_with_the_whole_html = returned_string_with_the_whole_html.replace("\\\\n", "").replace("\\\"","\"")
+        # print("----------------------------")
+        # print(returned_string_with_the_whole_html)
         data = returned_string_with_the_whole_html
         # print("success 2")
     except:
@@ -438,6 +443,22 @@ def GetJsonData(google_url):
         dataFromURL = urlopen(target_url)  # it's a file like object and works just like a file
         data = json.load(dataFromURL)
     return data
+
+def ManialUnicodeToStringConverter(ProvidedString):
+    ProvidedString = ProvidedString.replace("\\\\u0020"," ").replace("\\\\u0021","!").replace("\\\\u0022","\"").replace("\\\\u0023","#")\
+        .replace("\\\\u0024","$").replace("\\\\u0024","$").replace("\\\\u0025","%").replace("\\\\u0026","&").replace("\\\\u0027","'")\
+        .replace("\\\\u0028", "(").replace("\\\\u0029", ")").replace("\\\\u002A", "*").replace("\\\\u002B", "+").replace("\\\\u002C", ",")\
+        .replace("\\\\u002D", "-").replace("\\\\u002E", ".").replace("\\\\u002F", "/").replace("\\\\u003A", ":").replace("\\\\u003B", ";")\
+        .replace("\\\\u003C", "<").replace("\\\\u003D", "=").replace("\\\\u003E", ">").replace("\\\\u003F", "?").replace("\\\\u0040", "@")\
+        .replace("\\\\u005B", "[").replace("\\\\u005C", "\\").replace("\\\\u005D", "]").replace("\\\\u005E", "^").replace("\\\\u005F", "_")\
+        .replace("\\\\u0060", "`").replace("\\\\u007B", "{").replace("\\\\u007C", "|").replace("\\\\u007D", "}").replace("\\\\u007E", "~")\
+        .replace("\\\\u0024","$").replace("\\\\u0024","$").replace("\\\\u0025","%").replace("\\\\u0026","&").replace("\\\\u0027","'")\
+        .replace("\\\\u0028", "(").replace("\\\\u0029", ")").replace("\\\\u002a", "*").replace("\\\\u002b", "+").replace("\\\\u002c", ",")\
+        .replace("\\\\u002d", "-").replace("\\\\u002e", ".").replace("\\\\u002f", "/").replace("\\\\u003a", ":").replace("\\\\u003b", ";")\
+        .replace("\\\\u003c", "<").replace("\\\\u003d", "=").replace("\\\\u003e", ">").replace("\\\\u003f", "?").replace("\\\\u0040", "@")\
+        .replace("\\\\u005b", "[").replace("\\\\u005c", "\\").replace("\\\\u005d", "]").replace("\\\\u005e", "^").replace("\\\\u005f", "_")\
+        .replace("\\\\u0060", "`").replace("\\\\u007b", "{").replace("\\\\u007c", "|").replace("\\\\u007d", "}").replace("\\\\u007e", "~")
+    return ProvidedString
 
 def get_data_from_all_google_sources(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10):
     # You have to manually add the other sources because if they are empty I get errors.
@@ -495,7 +516,7 @@ def PostThread(waitTime, rss_str, user_agent, client_id, client_secret, username
                 # print(operation_mode)
                 if (operation_mode == "OnlineRealTimeComparison"):
                     if updateChecker1 != str(updated):
-                        print("> " + rss_str + " <--Posting From this URL (feed_sources)")
+                        # print("> " + rss_str + " <--Posting From this URL (feed_sources)")
                         updateChecker1 = str(updated)
 
                         link = str(url)
@@ -515,7 +536,7 @@ def PostThread(waitTime, rss_str, user_agent, client_id, client_secret, username
                 if (operation_mode == "LocalDatabasePostOnChange" or operation_mode == "HybridOperationMode"):
 
                     if updateChecker1 != str(updated):
-                        print("> " + rss_str + " <--Posting From this URL (feed_sources)")
+                        # print("> " + rss_str + " <--Posting From this URL (feed_sources)")
                         updateChecker1 = str(updated)
 
                         # link = str(url)
@@ -1232,3 +1253,4 @@ if __name__ == '__main__':
 # Also it is possible to have a cluster of raspberry pi-s run different bots without interfering with each other.
 # Requires local read/write operations in a database
     RatingCounter = ClusterableBots('RatingCounter', waitTime)
+
