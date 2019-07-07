@@ -8,6 +8,7 @@ import sys
 import urllib
 from collections import defaultdict
 from subprocess import check_call
+from termcolor import colored
 # import pip3
 
 while True:
@@ -145,6 +146,7 @@ feed_database_name = 'feed_sources_and_urls_database.sqlite'
 feed_table_name = 'feed_database'
 feed_sources = 'feed_sources'
 feed_urls = 'feed_urls'
+cashed_feed_urls = 'cashed_feed_urls'
 
 class GoogleDriveDownloadClass:
     string_before_spliting = ""
@@ -225,7 +227,7 @@ class ClusterableBots:
         Launcher_Thread_For_ClusterableBot.start()
 
 # This Method should be overwritten
-    def RunBot(user_agent, client_id, client_secret, username, password, subreddit, waitTime, threadsList):
+    def RunBot(user_agent, client_id, client_secret, username, password, subreddit, waitTime):
         print("Runned. Therefore it is not overwritten")
 
     def initCode(self, threadName, waitTime):
@@ -248,51 +250,10 @@ class ClusterableBots:
             username = parser.get('Credentials_RedditAPI', 'username')
             password = parser.get('Credentials_RedditAPI', 'password')
             subreddit = parser.get('Settings_Subreddit', 'subreddit')
-            source1 = parser.get('URL_Sources', 'source1')
-            source2 = parser.get('URL_Sources', 'source2')
-            source3 = parser.get('URL_Sources', 'source3')
-            source4 = parser.get('URL_Sources', 'source4')
-            source5 = parser.get('URL_Sources', 'source5')
-            source6 = parser.get('URL_Sources', 'source6')
-            source7 = parser.get('URL_Sources', 'source7')
-            source8 = parser.get('URL_Sources', 'source8')
-            source9 = parser.get('URL_Sources', 'source9')
-            source10 = parser.get('URL_Sources', 'source10')
 
-        while True:
-            try:
 
-                data = get_data_from_all_google_sources(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10)
-
-                x = 0
-                dataIndexArray1 = []
-                dataIndexArray2 = []
-                dataIndexArray3 = []
-
-                for dataIndexer1 in data:
-
-                    dataIndexArray1.append(dataIndexer1)
-                    x = x + 1
-                    for dataIndexer2 in data[dataIndexer1]['urls']:
-                        dataIndexer2 = codecs.decode(dataIndexer2, 'unicode_escape').encode('latin1').decode('utf8')
-
-                        dataIndexArray2.append(dataIndexer2)
-                        dataIndexArray3.append(dataIndexer2 + " " + dataIndexer1 + " " + data[dataIndexer1]['cssClass'])
-
-                threadsList = []
-                threadsList = dataIndexArray3
-
-                self.RunBot = RatingCounter_ClusterableBots
-                self.RunBot(user_agent, client_id, client_secret, username, password, subreddit, waitTime, threadsList)
-
-            except Exception as e:
-                # print("success111")
-                s = str(e)
-                indexExistingCheckBoolean = False
-                print('EXCEPTION1                                                                                ')
-                print(s)
-                pass
-
+        self.RunBot = RatingCounter_ClusterableBots
+        self.RunBot(user_agent, client_id, client_secret, username, password, subreddit, waitTime)
 
 def main(threadName, waitTime):
     operation_mode = ""
@@ -395,13 +356,14 @@ def main(threadName, waitTime):
             #     time.sleep(waitTime * 3 / 2)  # increasing to 25 from 20
 
             if(threadName=="ModeratingThread"):
+                print(colored(threadName + " id " + str(threading.current_thread().ident), 'green', 'on_red'))
                 ModeratingThread = threading.Thread(target=ModerationThread, args=(
                     user_agent, client_id, client_secret, username, password, subreddit))
                 ModeratingThread.start()
                 time.sleep(waitTime/3) # increasing to 25 from 20
 
-
             if (threadName == "PostingThread"):
+                print(colored(threadName + " id " + str(threading.current_thread().ident), 'cyan'))
                 # print(str(threadsList) + " <-- " + "This is the threadsList")
                 for threadsInstance in threadsList:
                     threads = []
@@ -424,27 +386,40 @@ def main(threadName, waitTime):
             pass
 
 def GetJsonData(google_url):
+    google_url1 = google_url.replace("https://docs.google.com/document/d/", "")
+    google_url2 = google_url1.replace("/edit", "")
     try:
         # Try to get the data from the google link
-        # print("urls source 1")
         gddc = GoogleDriveDownloadClass
         returned_string_with_the_whole_html = gddc(google_url).get_downloaded_string()
-        returned_string_with_the_whole_html = ManialUnicodeToStringConverter(returned_string_with_the_whole_html)
-        # print(returned_string_with_the_whole_html)
+        returned_string_with_the_whole_html = ManualUnicodeToStringConverter(returned_string_with_the_whole_html)
         returned_string_with_the_whole_html = returned_string_with_the_whole_html.replace("\\\\n", "").replace("\\\"","\"")
-        # print("----------------------------")
-        # print(returned_string_with_the_whole_html)
         data = returned_string_with_the_whole_html
+
+        with open(google_url2, "w") as text_file:
+            text_file.write(data)
+
+        # print(data)
         # print("success 2")
     except:
         # Version 2 of getting sources - a legacy approach that should be used if the new version does not work.
-        print("urls source 1 failed, switching to urls source 2")
-        target_url = 'https://pastebin.com/raw/n8aCxq1F'
-        dataFromURL = urlopen(target_url)  # it's a file like object and works just like a file
-        data = json.load(dataFromURL)
+
+        # as of 02/07/2019 it is not a good idea to use that method and
+        # the new method to fight problems with getting sources is to cashe the sources to a file and read from it
+        # with the idea that eventually new sources are going to be downloaded
+
+        # print("urls source 1 failed, switching to urls source 2")
+        # target_url = 'https://pastebin.com/raw/n8aCxq1F'
+        # dataFromURL = urlopen(target_url)  # it's a file like object and works just like a file
+        # data = json.load(dataFromURL)
+
+        print("getting sources from Google failed, cashed local sources are going to be used instead.")
+        with open(google_url2, "r") as f:
+            data = f.read()
+
     return data
 
-def ManialUnicodeToStringConverter(ProvidedString):
+def ManualUnicodeToStringConverter(ProvidedString):
     ProvidedString = ProvidedString.replace("\\\\u0020"," ").replace("\\\\u0021","!").replace("\\\\u0022","\"").replace("\\\\u0023","#")\
         .replace("\\\\u0024","$").replace("\\\\u0024","$").replace("\\\\u0025","%").replace("\\\\u0026","&").replace("\\\\u0027","'")\
         .replace("\\\\u0028", "(").replace("\\\\u0029", ")").replace("\\\\u002A", "*").replace("\\\\u002B", "+").replace("\\\\u002C", ",")\
@@ -478,10 +453,32 @@ def get_data_from_all_google_sources(source1, source2, source3, source4, source5
     for dataSource in googleSources:
         finalStringData += GetJsonData(dataSource)
 
-    finalStringData = finalStringData.replace('}{', ',')
-    finalStringData = json.loads(finalStringData)
+    try:
+        if(json_validator(finalStringData)):
+            with open("GoogleDocsJsonCashe.json", "w") as text_file:
+                text_file.write(finalStringData)
+        else:
+            # print("not valid json")
+            raise ValueError("Not valid json. Do not read/save from/to cashe.")
 
-    return finalStringData
+    except Exception as e:
+        s = str(e)
+        print("Either json cashe file read/write operation failed, or the json was not valid " + " \n" +s)
+        pass
+
+    with open("GoogleDocsJsonCashe.json", "r") as f:
+        finalStringData2 = f.read()
+        finalStringData2 = json.loads(str(finalStringData2))
+
+    return finalStringData2
+
+def json_validator(data):
+    try:
+        json.loads(data)
+        return True
+    except ValueError as error:
+        print("invalid json: %s" % error)
+        return False
 
 def PostThread(waitTime, rss_str, user_agent, client_id, client_secret, username, password, subreddit_var, tag, cssClass, operation_mode):
 
@@ -497,77 +494,127 @@ def PostThread(waitTime, rss_str, user_agent, client_id, client_secret, username
     SourceReddit= ''
 
     t_end = time.time() + waitTime # reducing to 50 from 60
-    while time.time() < t_end:
-        feed = feedparser.parse(rss_str)
-        indexExistingCheckBoolean = True
 
-        try:
+    # while time.time() < t_end:
+    # TODO see if it needs to be always true
+    # while True:
+    # print("thread id " + str(threading.current_thread().ident))
+    # print("t_end       " + str(t_end)[7:])
+    # print("time.time() " + str(time.time())[7:])
 
-            if feed['entries'][0] is not None and indexExistingCheckBoolean is True:
-                title = feed['entries'][0].title
-                description = feed['entries'][0].summary,
-                url = feed['entries'][0].link,
-                updated = feed['entries'][0].updated
+    print(colored("PostThread Thread id " + str(threading.current_thread().ident), 'green'))
+    print(threading.enumerate())
 
-                NumberOfComments = ''
-                ItemExistingChecker = False
-                link = ''
+    feed = feedparser.parse(rss_str)
+    indexExistingCheckBoolean = True
 
-                # print(operation_mode)
-                if (operation_mode == "OnlineRealTimeComparison"):
-                    if updateChecker1 != str(updated):
-                        # print("> " + rss_str + " <--Posting From this URL (feed_sources)")
-                        updateChecker1 = str(updated)
+    try:
 
-                        link = str(url)
-                        link = link.replace('(u\'', '', 1)
-                        link = link[0: len(link) - 3]
+        if feed['entries'][0] is not None and indexExistingCheckBoolean is True:
+            title = feed['entries'][0].title
+            description = feed['entries'][0].summary,
+            url = feed['entries'][0].link,
+            updated = feed['entries'][0].updated
 
-                        print("> " + str(url) + " <-- Specific URL (feed_urls)")
+            NumberOfComments = ''
+            ItemExistingChecker = False
+            link = ''
 
-                        if 'https://www.reddit.com/' in link:
-                            submission1 = reddit.submission(url=link)
-                            NumberOfComments = str(submission1.num_comments).encode('utf-8')
-                        else:
-                            NumberOfComments = ''
+            # print(operation_mode)
+            if (operation_mode == "OnlineRealTimeComparison"):
+                if updateChecker1 != str(updated):
+                    # print("> " + rss_str + " <--Posting From this URL (feed_sources)")
+                    updateChecker1 = str(updated)
 
-                        SubmitFunction(link, NumberOfComments, title, url, subreddit, feed, cssClass, tag)
+                    link = str(url)
+                    link = link.replace('(u\'', '', 1)
+                    link = link[0: len(link) - 3]
 
-                if (operation_mode == "LocalDatabasePostOnChange" or operation_mode == "HybridOperationMode"):
+                    print("> " + str(url) + " <-- Specific URL (feed_urls)")
 
-                    if updateChecker1 != str(updated):
-                        # print("> " + rss_str + " <--Posting From this URL (feed_sources)")
-                        updateChecker1 = str(updated)
+                    if 'https://www.reddit.com/' in link:
+                        submission1 = reddit.submission(url=link)
+                        NumberOfComments = str(submission1.num_comments).encode('utf-8')
+                    else:
+                        NumberOfComments = ''
 
-                        # link = str(url)
-                        # link = link.replace('(u\'', '', 1)
-                        # link = link[0: len(link) - 3]
+                    SubmitFunction(link, NumberOfComments, title, url, subreddit, feed, cssClass, tag)
 
-                        print("> " + str(url) + " <-- Specific URL (feed_urls)")
+            if (operation_mode == "LocalDatabasePostOnChange" or operation_mode == "HybridOperationMode"):
 
-                        if 'https://www.reddit.com/' in link:
-                            submission1 = reddit.submission(url=link)
-                            NumberOfComments = str(submission1.num_comments).encode('utf-8')
-                        else:
-                            NumberOfComments = ''
+                if updateChecker1 != str(updated):
+                    # print("> " + rss_str + " <--Posting From this URL (feed_sources)")
+                    updateChecker1 = str(updated)
+
+                    # link = str(url)
+                    # link = link.replace('(u\'', '', 1)
+                    # link = link[0: len(link) - 3]
+
+                    # print("> " + str(url) + " <-- Specific URL (feed_urls)")
+
+                    if 'https://www.reddit.com/' in link:
+                        submission1 = reddit.submission(url=link)
+                        NumberOfComments = str(submission1.num_comments).encode('utf-8')
+                    else:
+                        NumberOfComments = ''
+
+                try:
+                    databaseFeedURLcashed_feed_urls = str(GetTargetRowFromDBcashed_feed_urls(rss_str, str(url)[:-3][2:], feed_database_name, feed_table_name, cashed_feed_urls))
+                    print("The same URL already exists in the cashed database - " + str(url)[:-3][2:])
+
+                except Exception as e:
+                    s = str(e)
+                    # print(" failed to make the check if url " + str(url)[:-3][2:] + " exists in the database, "
+                    #       "you should get an 'index out of range' because you return the 0 index of an empthy array: " + s)
+                    # print("The Url " + str(url)[:-3][2:] + " has not been found in the database")
+                    print(colored("The Url is not in the cashed database", "red"))
 
                     try:
-                        databaseFeedURL = str(GetTargetRowFromDB(rss_str, url, feed_database_name, feed_table_name, feed_sources, feed_urls))
-                        # print(databaseFeedURL + "<-- Row \n")
-                        # print(str(url)[:-3][2:] + "<-- URL \n")
+                        databaseFeedURLfeed_urls = str(GetTargetRowFromDBfeed_urls(rss_str, str(url)[:-3][2:], feed_database_name, feed_table_name,feed_urls))
+                        print(colored("The same URL already exists in the database - " + str(url)[:-3][2:], "red","on_grey"))
 
-                        # print(str(str(url)[:-2][1:]) + "<-- URL \n")
+                    except Exception as e:
+                        s = str(e)
+                        # print(" failed to make the check if url " + str(url)[:-3][2:] + " exists in the database, "
+                        #       "you should get an 'index out of range' because you return the 0 index of an empthy array: " + s)
+                        print(colored("   ", "red","on_green") + colored(" The Url " + str(url)[:-3][2:] +
+                              " has not been found in the database so lets try to post it on reddit", "green"))
 
-                        if(databaseFeedURL in str(str(url)[:-3][2:])):
-# Both links are the same. Do nothing
-#                           print("Both links are the same. Do nothing")
-                            pass
-                        else:
-# Different links, should update the database with the new link
-                            print("Different links, should update the database with the new link. "
-                                  "This means a change in urls and a link to be posted.")
-                            ExecuteUPDATE_SQL_Query(databaseFeedURL, str(str(url)[:-3][2:]))#[:-3][2:]
-                            databaseFeedURL = str(GetTargetRowFromDB(rss_str, str(url), feed_database_name, feed_table_name, feed_sources, feed_urls))
+                        try:
+                            # print(str(url)[:-3][2:] + "<-- str(url)[:-3][2:]")
+                            # print(str(url) + "<-- URL")
+
+                            databaseFeedURL = str(GetTargetRowFromDBfeed_sources(rss_str, str(url)[:-3][2:] , feed_database_name, feed_table_name, feed_sources))
+
+                            if(str(url)[:-3][2:] in databaseFeedURL):
+        # Both links are the same. Do nothing
+        #                           print("Both links are the same. Do nothing")
+                                pass
+                            else:
+        # Different links, should update the database with the new link
+                                print("Different links, should update the database with the new link. "
+                                      "This means a change in urls and a link to be posted.")
+                                # print(str(str(url)[:-3][2:]))
+                                # print(databaseFeedURL)
+                                ExecuteUPDATE_SQL_Query(databaseFeedURL, str(url)[:-3][2:])#[:-3][2:]
+                                databaseFeedURL = str(GetTargetRowFromDBfeed_sources(rss_str, str(url), feed_database_name, feed_table_name, feed_sources))
+                                # print("databaseFeedURL: "  + databaseFeedURL)
+
+                                # url = str("('" + databaseFeedURL + "',)")
+                                url = str("" + databaseFeedURL + "")
+                                link = str(url)
+                                link = link.replace('(u\'', '', 1)
+                                link = link[0: len(link) - 3]
+                                # print(url + "<-- URL.2 \n")
+                                SubmitFunction(link, NumberOfComments, title, url, subreddit, feed, cssClass, tag)
+                                #         "\""+str(url)[:-2]
+                        except Exception as e:
+                            s = str(e)
+                            print("Failed. Either because of an error with the query "
+                                  "or because the database is not populated. Populating regardless." + " \n" + s)
+                            print("stryrl "+str(url))
+                            PopulateSQLTableForBot(str(rss_str), str(url)[:-3][2:], feed_database_name, feed_table_name, feed_sources, feed_urls, cashed_feed_urls)
+                            databaseFeedURL = str(GetTargetRowFromDBfeed_sources(rss_str, str(url), feed_database_name, feed_table_name, feed_sources))
                             # url = str("('" + databaseFeedURL + "',)")
                             url = str("" + databaseFeedURL + "")
                             link = str(url)
@@ -575,42 +622,28 @@ def PostThread(waitTime, rss_str, user_agent, client_id, client_secret, username
                             link = link[0: len(link) - 3]
                             print(url + "<-- URL.2 \n")
                             SubmitFunction(link, NumberOfComments, title, url, subreddit, feed, cssClass, tag)
-                            #         "\""+str(url)[:-2]
-                    except Exception as e:
-                        s = str(e)
-                        print("Failed. Either because of an error with the query "
-                              "or because the database is not populated. Populating regardless." + " \n" + s)
-                        print("stryrl "+str(url))
-                        PopulateSQLTableForBot(str(rss_str), str(url)[:-3][2:], feed_database_name, feed_table_name, feed_sources, feed_urls)
-                        databaseFeedURL = str(GetTargetRowFromDB(rss_str, str(url), feed_database_name, feed_table_name, feed_sources, feed_urls))
-                        # url = str("('" + databaseFeedURL + "',)")
-                        url = str("" + databaseFeedURL + "")
-                        link = str(url)
-                        link = link.replace('(u\'', '', 1)
-                        link = link[0: len(link) - 3]
-                        print(url + "<-- URL.2 \n")
-                        SubmitFunction(link, NumberOfComments, title, url, subreddit, feed, cssClass, tag)
+                            pass
                         pass
+                    pass
 
+                # print(str(url)[:-3][2:] + "<-- URL \n")
 
-                    # print(str(url)[:-3][2:] + "<-- URL \n")
+                # PopulateSQLTableForBot(str(rss_str), str(url))
 
-                    # PopulateSQLTableForBot(str(rss_str), str(url))
+            submit = ''
+            SourceNonReddit = ''
+            SourceReddit= ''
 
-                submit = ''
-                SourceNonReddit = ''
-                SourceReddit= ''
-
-        except Exception as e:
-            s = str(e)
-            indexExistingCheckBoolean = False
-            if "DOMAIN_BANNED" in s or "received 503 HTTP response" in s:
-                print("Error: " + s + "<-- not sending an email because of it, but not posting either.")
-            else:
-                send_email("Error with this feed source: " + rss_str + " ||| Error code: " + s)
-            print('EXCEPTION       '+rss_str)
-            print(s)
-            pass
+    except Exception as e:
+        s = str(e)
+        indexExistingCheckBoolean = False
+        if "DOMAIN_BANNED" in s or "received 503 HTTP response" in s:
+            print("Error: " + s + "<-- not sending an email because of it, but not posting either.")
+        # else:
+            # send_email("Error with this feed source: " + rss_str + " ||| Error code: " + s)
+        print('EXCEPTION       '+rss_str)
+        print(s)
+        pass
     # print("--- %s seconds ---" % (time.time() - start_time))
 
 def ModerationThread(user_agent, client_id, client_secret, username, password, subreddit_var):
@@ -624,6 +657,9 @@ def ModerationThread(user_agent, client_id, client_secret, username, password, s
     dic = defaultdict(list)
     lis = []
     coordinatedGeneratedById = []
+
+    print(colored("ModerationThread Thread id " + str(threading.current_thread().ident), 'yellow'))
+    print(threading.enumerate())
 
     i=0
     for submission in subreddit.new(limit=100): # was 1000, changed to 100 for better speed
@@ -813,12 +849,13 @@ def close(conn):
     conn.commit()
     conn.close()
 
-def CreateNewDatabase(sqlite_file, table_name, feed_sources, feed_urls, field_type):
+def CreateNewDatabase(sqlite_file, table_name, feed_sources, feed_urls, field_type, cashed_feed_urls):
 
     sqlite_file = str(sqlite_file)
     table_name = str(table_name)
     feed_sources = str(feed_sources)
     feed_urls = str(feed_urls)
+    cashed_feed_urls = str(cashed_feed_urls)
 
     # print("works")
 
@@ -830,13 +867,19 @@ def CreateNewDatabase(sqlite_file, table_name, feed_sources, feed_urls, field_ty
         s = str(e)
         print("Query ignored -> You tried to create a table that already exists: " + s)
         pass
-
     try:
         c.execute("ALTER TABLE {tn} ADD COLUMN '{cn}' {ct}".format(tn=table_name, cn=feed_urls, ct=field_type))
     except Exception as e:
         s = str(e)
         print("Query ignored -> Duplicate column name: " + s)
         pass
+    try:
+        c.execute("ALTER TABLE {tn} ADD COLUMN '{cfu}' {ct}".format(tn=table_name, cfu = cashed_feed_urls, ct=field_type))
+    except Exception as e:
+        s = str(e)
+        print("Query ignored -> Duplicate column name: " + s)
+        pass
+
 
     close(conn)
 
@@ -912,6 +955,7 @@ def ExecuteUPDATE_SQL_Query(old_row_var, new_url_var):
     feed_sources = 'feed_sources'
     feed_urls = 'feed_urls'
     field_type = 'varchar'
+    cashed_feed_urls = 'cashed_feed_urls'
 
     system_params = (sqlite_file, table_name)
     # variables_params = (feed_sources, feed_urls)
@@ -929,8 +973,15 @@ def ExecuteUPDATE_SQL_Query(old_row_var, new_url_var):
 
     ExecuteScriptCustomSQLQuery(sqlite_file, """ UPDATE {table_name} SET {feed_urls} = '{var_two}' WHERE {feed_urls} = '{var_one}';"""
                                 .format(table_name=table_name, feed_sources=feed_sources,
-                                        feed_urls=feed_urls, var_one=params[0],
-                                        var_two=params[1]), "No")
+                                        feed_urls=feed_urls, var_one=params[0],var_two=params[1]), "No")
+
+    # print(""" UPDATE {table_name} SET {cashed_feed_urls} = '{var_one}' WHERE {feed_urls} = '{var_two}';"""
+    #                             .format(table_name=table_name, feed_sources=feed_sources,
+    #                                     cashed_feed_urls=cashed_feed_urls, feed_urls=feed_urls, var_one=params[0],var_two=params[1]))
+
+    ExecuteScriptCustomSQLQuery(sqlite_file, """ UPDATE {table_name} SET {cashed_feed_urls} = '{var_one}' WHERE {feed_urls} = '{var_two}';"""
+                                .format(table_name=table_name, feed_sources=feed_sources,
+                                        cashed_feed_urls=cashed_feed_urls, feed_urls=feed_urls, var_one=params[0],var_two=params[1]), "No")
 
     # CREATE TABLE table_name (column1 varchar(255),column2 varchar(255));
 
@@ -944,16 +995,55 @@ def ExecuteUPDATE_SQL_Query(old_row_var, new_url_var):
 
     close(conn)
 
-def GetTargetRowFromDB(rss_str_var_feed_sources, url_var_feed_urls, database_name, table_name, feed_sources, feed_urls):
+def GetTargetRowFromDBfeed_sources(
+        rss_str_var_feed_sources, url_var_feed_urls, database_name, table_name, feed_sources):
 
     params = (rss_str_var_feed_sources, url_var_feed_urls)
     row_string = ExecuteCustomSQLQuery(database_name,
     """ SELECT * FROM {table_name} WHERE {feed_sources} = '{var_one}';""".format(
         table_name=table_name, feed_sources=feed_sources, var_one=params[0]), "Yes")
 
+
+
     row_string = str(row_string).split(',')
-    # print(row_string[0])
-    return row_string[1][:-3][2:]
+    # print("row_string " + str(row_string[1])[:-1][2:] + " end")
+    # row_string[1][:-3][2:]
+    return str(row_string[1])[:-1][2:]
+
+def GetTargetRowFromDBfeed_urls(
+        rss_str_var_feed_sources, url_var_feed_urls, database_name, table_name, feed_urls):
+
+    params = (rss_str_var_feed_sources, url_var_feed_urls)
+
+    # print("params[0] " + str(params[0]))
+    # print("params[1] " + str(params[1])[:-3][2:])
+
+    row_string = ExecuteCustomSQLQuery(database_name,
+    """ SELECT * FROM {table_name} WHERE {feed_urls} = '{var_one}';""".format(
+        table_name=table_name, feed_urls=feed_urls, var_one= str(params[1])), "Yes")
+
+    # print("feed_urls " + str(row_string) + " end")
+    # row_string = str(row_string).split(',')
+
+    return row_string[0]
+
+def GetTargetRowFromDBcashed_feed_urls(
+        rss_str_var_feed_sources, url_var_feed_urls, database_name, table_name, cashed_feed_urls):
+
+    params = (rss_str_var_feed_sources, url_var_feed_urls)
+
+    # print("params[0] " + str(params[0]))
+    # print("params[1] " + str(params[1])[:-3][2:])
+
+    row_string = ExecuteCustomSQLQuery(database_name,
+    """ SELECT * FROM {table_name} WHERE {cashed_feed_urls} = '{var_one}';""".format(
+        table_name=table_name, cashed_feed_urls=cashed_feed_urls, var_one= str(params[1])), "Yes")
+
+    # print("feed_urls " + str(row_string) + " end")
+    # row_string = str(row_string).split(',')
+
+    return row_string[0]
+
 
 def ExecuteCustomSQLQuery(sqlite_file, sql_query, boolean_return):
     conn, c = connect(sqlite_file)
@@ -1003,7 +1093,7 @@ def SimplePopulateSQLTable(database_name, table_name, column1, column2, variable
     ExecuteINSERT_INTO_SQL_withAtributes(atributes, params)
 
 
-def PopulateSQLTableForBot(rss_str_var_feed_sources, url_var_feed_urls, database_name, table_name, feed_sources, feed_urls):
+def PopulateSQLTableForBot(rss_str_var_feed_sources, url_var_feed_urls, database_name, table_name, feed_sources, feed_urls, cashed_feed_urls):
     # sqlite_file = 'feed_sources_and_urls_database.sqlite'
     # table_name = 'feed_database'
     # feed_sources = 'feed_sources'
@@ -1017,7 +1107,7 @@ def PopulateSQLTableForBot(rss_str_var_feed_sources, url_var_feed_urls, database
 
     params = (rss_str_var_feed_sources, url_var_feed_urls)
 
-    CreateNewDatabase(database_name, table_name, feed_sources, feed_urls, field_type)
+    CreateNewDatabase(database_name, table_name, feed_sources, feed_urls, field_type, cashed_feed_urls)
     ExecuteINSERT_INTO_SQL_withAtributes(atributes, params)
 
 def CreateNewTableInDatabase(database_name, new_table_name, feed_sources, frequency):
@@ -1033,13 +1123,13 @@ def SubmitFunction(link, NumberOfComments, title, url, subreddit, feed, cssClass
         SourceReddit = link.replace('https://www.reddit.com/r/', '')
         SourceReddit = 'r/' + SourceReddit.split("/")[0]
         submit = u' '.join(('[', str(NumberOfComments), '] ', str(title[0:265]))).encode('utf-8')
-        print("> " + str(url) + " <-- Specific URL (feed_urls)")
+        # print("> " + str(url) + " <-- Specific URL (feed_urls)")
         # print("url: " + str(url))
         subreddit.submit(submit, url=url)
     else:
         SourceNonReddit = link.split("/")[2]
         SourceNonReddit = SourceNonReddit.replace('www.', '')
-        print("> " + str(url) + " <-- Specific URL (feed_urls)")
+        # print("> " + str(url) + " <-- Specific URL (feed_urls)")
         # print("url: " + str(url))
         submit = str(title[0:265]).encode('utf-8')
         subreddit.submit(submit, url=url)
@@ -1067,123 +1157,187 @@ def SubmitFunction(link, NumberOfComments, title, url, subreddit, feed, cssClass
             break
 
 """ METHOD OVERRIDE """
-def RatingCounter_ClusterableBots(user_agent, client_id, client_secret, username, password, subreddit, waitTime, threadsList):
+def RatingCounter_ClusterableBots(user_agent, client_id, client_secret, username, password, subreddit, waitTime):
     # print("runs324324")
     RatingCounter_Thread = threading.Thread(target=RatingCounter, args=(user_agent, client_id, client_secret, username, password, subreddit))
     RatingCounter_Thread.start()
-    time.sleep(waitTime / 3)
+    # time.sleep(waitTime / 3)
+    # Trying this with increased waitTime
+    time.sleep(waitTime)
+    # RatingCounter(user_agent, client_id, client_secret, username, password, subreddit)
 
 """ RatingCounter counts if the rating on posts is float and if it, it sends email to mod so that
 # the rated news source is taken actions against. If the source scores multiple downvotes, mod can delete it,
 # or lower its rating. """
 def RatingCounter(user_agent, client_id, client_secret, username, password, subreddit_var):
+
+    # dic = defaultdict(list)
+    # lis = []
+    # coordinatedGeneratedById = []
+
+    # while True:
+
     rating_database_name = 'rating_sources_and_urls_database.sqlite'
     rating_table_name = 'rating_database'
     rating_sources = 'rating_sources'
     rating_boolean_ifsend = 'rating_boolean_ifsend'
 
     start_time = time.time()
-    reddit = praw.Reddit(user_agent=user_agent,
-                         client_id=client_id, client_secret=client_secret,
-                         username=username, password=password)
 
-    subreddit = reddit.subreddit(subreddit_var)
-    # dic = defaultdict(list)
-    # lis = []
-    # coordinatedGeneratedById = []
 
-    i = 0
-    for submission in subreddit.new(limit=100):  # was 1000, changed to 100 for better speed
-        # print(submission.url + " "  + str(submission.upvote_ratio)) #+ str(submission.ups) + " " + str(submission.downs) + " "
+    print(colored("RatingCounter Thread id " + str(threading.current_thread().ident),'magenta'))
 
-        # print(submission.url)
-        # print(submission.upvote_ratio)
+    while True:
+        # print("gggg")
 
-    # Have a database of all float values and send emails for float values
-        if (str(submission.upvote_ratio) == "1.0"):
-            # Link is not upvoted or downvoted. Do nothing.
-            # print("Both links are the same. Do nothing")
+        reddit = praw.Reddit(user_agent=user_agent,
+                             client_id=client_id, client_secret=client_secret,
+                             username=username, password=password)
+
+        subreddit = reddit.subreddit(subreddit_var)
+
+        source1 = parser.get('URL_Sources', 'source1')
+        source2 = parser.get('URL_Sources', 'source2')
+        source3 = parser.get('URL_Sources', 'source3')
+        source4 = parser.get('URL_Sources', 'source4')
+        source5 = parser.get('URL_Sources', 'source5')
+        source6 = parser.get('URL_Sources', 'source6')
+        source7 = parser.get('URL_Sources', 'source7')
+        source8 = parser.get('URL_Sources', 'source8')
+        source9 = parser.get('URL_Sources', 'source9')
+        source10 = parser.get('URL_Sources', 'source10')
+
+        try:
+
+            data = get_data_from_all_google_sources(source1, source2, source3,
+                                                    source4, source5, source6, source7, source8, source9, source10)
+
+            x = 0
+            dataIndexArray1 = []
+            dataIndexArray2 = []
+            dataIndexArray3 = []
+
+            for dataIndexer1 in data:
+
+                dataIndexArray1.append(dataIndexer1)
+                x = x + 1
+                for dataIndexer2 in data[dataIndexer1]['urls']:
+                    dataIndexer2 = codecs.decode(dataIndexer2, 'unicode_escape').encode('latin1').decode('utf8')
+
+                    dataIndexArray2.append(dataIndexer2)
+                    dataIndexArray3.append(dataIndexer2 + " " + dataIndexer1 + " " + data[dataIndexer1]['cssClass'])
+
+            threadsList = []
+            threadsList = dataIndexArray3
+
+
+        except Exception as e:
+            # print("success111")
+            s = str(e)
+            indexExistingCheckBoolean = False
+            print('EXCEPTION1                                                                                ')
+            print(s)
             pass
-        else:
-            # Link is upvoted or downvoted. Do something.
-            try:
-                # The gist of this try catch is to to find posts with different than 1 second value and
-                # add then to the db and send email, all done in the except statement
 
-                # print("test")
+        i = 0
+        for submission in subreddit.new(limit=100):  # was 1000, changed to 100 for better speed
+            # print(submission.url + " "  + str(submission.upvote_ratio)) #+ str(submission.ups) + " " + str(submission.downs) + " "
 
-                # A trigger for the rating in the try that also works for all but the first element
-                databaseFeedURL = GetTargetRowFromDBVersion2(submission.url, "1",
-                                                             str(rating_database_name), str(rating_table_name),
-                                                             str(rating_sources), str(rating_boolean_ifsend))
-                if (len(databaseFeedURL) == 1):
-                    PopulateSQLTableForBot(submission.url, "1",
-                                           str(rating_database_name), str(rating_table_name),
-                                           str(rating_sources), str(rating_boolean_ifsend))
+            # print(submission.url)
+            # print(submission.upvote_ratio)
+
+            # print("submission.url " + submission.url + " submission.upvote_ratio " + str(submission.upvote_ratio))
+
+        # Have a database of all float values and send emails for float values
+            if (str(submission.upvote_ratio) == "1.0"):
+                # Link is not upvoted or downvoted. Do nothing.
+                # print("Both links are the same. Do nothing")
+                pass
+            else:
+                # Link is upvoted or downvoted. Do something.
+                try:
+                    # The gist of this try catch is to to find posts with different than 1 second value and
+                    # add then to the db and send email, all done in the except statement
+
+                    print(colored("$$$$$$$@@@@@@@@@@ success submission.url "
+                                  + submission.url + " submission.upvote_ratio " + str(submission.upvote_ratio), 'red'))
+
+                    # A trigger for the rating in the try that also works for all but the first element
                     databaseFeedURL = GetTargetRowFromDBVersion2(submission.url, "1",
                                                                  str(rating_database_name), str(rating_table_name),
                                                                  str(rating_sources), str(rating_boolean_ifsend))
+
+                    # print("databaseFeedURL " + str(len(databaseFeedURL))+ " databaseFeedURL " +str(databaseFeedURL))
+
+                    if (len(databaseFeedURL) == 1):
+                        PopulateSQLTableForBot(submission.url, "1",
+                                               str(rating_database_name), str(rating_table_name),
+                                               str(rating_sources), str(rating_boolean_ifsend), cashed_feed_urls)
+                        databaseFeedURL = GetTargetRowFromDBVersion2(submission.url, "1",
+                                                                     str(rating_database_name), str(rating_table_name),
+                                                                     str(rating_sources), str(rating_boolean_ifsend))
+                        parsed_uri = urlparse(submission.url)
+                        base_url = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
+                        # print(base_url)
+                        incraesing_variable_for_database = 0
+
+                        SimplePopulateSQLTable(str(rating_database_name), 'frequency_table'
+                                               ,'feed_sources', 'frequency'
+                                               , base_url, incraesing_variable_for_database)
+
+                        # UPDATE frequency_table SET frequency = frequency + 1 WHERE feed_sources='https://askubuntu.com/'
+
+                        ExecuteScriptCustomSQLQuery(str(rating_database_name),
+                                """UPDATE frequency_table SET frequency = frequency + 1 WHERE feed_sources='{fs}'"""
+                                                    .format(fs=base_url), 0)
+
+                        # print("ExecuteScriptCustomSQLQuery: " + str(ExecuteCustomSQLQuery(str(rating_database_name),
+                        # """SELECT DISTINCT feed_sources, MAX(frequency) FROM frequency_table WHERE feed_sources='{fs}'
+                        # GROUP BY feed_sources ORDER BY feed_sources DESC;""".format(fs=base_url), "Yes")))
+
+                        send_email("URL: " + str(submission.url) + " Source + Score: " +
+                                   str(ExecuteCustomSQLQuery(str(rating_database_name),
+                        """SELECT DISTINCT feed_sources, MAX(frequency) FROM frequency_table WHERE feed_sources='{fs}' 
+                        GROUP BY feed_sources ORDER BY feed_sources DESC;""".format(fs=base_url), "Yes")))
+
+                except Exception as e:
+                    s = str(e)
+                    print("Failed. Either because of an error with the query "
+                          "or because the database is not populated. Populating regardless." + " \n" + s)
+
+                    # A dt action that works first element
+                    PopulateSQLTableForBot(submission.url, "1",
+                                           str(rating_database_name), str(rating_table_name),
+                                           str(rating_sources), str(rating_boolean_ifsend), cashed_feed_urls)
+
+                    # print("Added:" + str(submission.url) + " "  + str(submission.upvote_ratio))
+
+                    CreateNewTableInDatabase(str(rating_database_name), 'frequency_table', 'feed_sources', 'frequency')
+
                     parsed_uri = urlparse(submission.url)
                     base_url = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
                     # print(base_url)
                     incraesing_variable_for_database = 0
 
                     SimplePopulateSQLTable(str(rating_database_name), 'frequency_table'
-                                           ,'feed_sources', 'frequency'
+                                           , 'feed_sources', 'frequency'
                                            , base_url, incraesing_variable_for_database)
 
-                    # UPDATE frequency_table SET frequency = frequency + 1 WHERE feed_sources='https://askubuntu.com/'
-
                     ExecuteScriptCustomSQLQuery(str(rating_database_name),
-                            """UPDATE frequency_table SET frequency = frequency + 1 WHERE feed_sources='{fs}'"""
+                                                """UPDATE frequency_table SET frequency = frequency + 1 WHERE feed_sources='{fs}'"""
                                                 .format(fs=base_url), 0)
 
                     # print("ExecuteScriptCustomSQLQuery: " + str(ExecuteCustomSQLQuery(str(rating_database_name),
-                    # """SELECT DISTINCT feed_sources, MAX(frequency) FROM frequency_table WHERE feed_sources='{fs}'
-                    # GROUP BY feed_sources ORDER BY feed_sources DESC;""".format(fs=base_url), "Yes")))
+                    #   """SELECT DISTINCT feed_sources, MAX(frequency) FROM frequency_table WHERE feed_sources='{fs}'
+                    #   GROUP BY feed_sources ORDER BY feed_sources DESC;""".format(
+                    #       fs=base_url), "Yes")))
+
+                    # send_email("This url was downvoted:" + str(submission.url) + " "  + str(submission.upvote_ratio))
 
                     send_email("URL: " + str(submission.url) + " Source + Score: " + str(ExecuteCustomSQLQuery(str(rating_database_name),
                     """SELECT DISTINCT feed_sources, MAX(frequency) FROM frequency_table WHERE feed_sources='{fs}' 
-                    GROUP BY feed_sources ORDER BY feed_sources DESC;""".format(fs=base_url), "Yes")))
-
-            except Exception as e:
-                s = str(e)
-                print("Failed. Either because of an error with the query "
-                      "or because the database is not populated. Populating regardless." + " \n" + s)
-
-                # A dt action that works first element
-                PopulateSQLTableForBot(submission.url, "1",
-                                       str(rating_database_name), str(rating_table_name),
-                                       str(rating_sources), str(rating_boolean_ifsend))
-
-                # print("Added:" + str(submission.url) + " "  + str(submission.upvote_ratio))
-
-                CreateNewTableInDatabase(str(rating_database_name), 'frequency_table', 'feed_sources', 'frequency')
-
-                parsed_uri = urlparse(submission.url)
-                base_url = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
-                # print(base_url)
-                incraesing_variable_for_database = 0
-
-                SimplePopulateSQLTable(str(rating_database_name), 'frequency_table'
-                                       , 'feed_sources', 'frequency'
-                                       , base_url, incraesing_variable_for_database)
-
-                ExecuteScriptCustomSQLQuery(str(rating_database_name),
-                                            """UPDATE frequency_table SET frequency = frequency + 1 WHERE feed_sources='{fs}'"""
-                                            .format(fs=base_url), 0)
-
-                # print("ExecuteScriptCustomSQLQuery: " + str(ExecuteCustomSQLQuery(str(rating_database_name),
-                #   """SELECT DISTINCT feed_sources, MAX(frequency) FROM frequency_table WHERE feed_sources='{fs}'
-                #   GROUP BY feed_sources ORDER BY feed_sources DESC;""".format(
-                #       fs=base_url), "Yes")))
-
-                # send_email("This url was downvoted:" + str(submission.url) + " "  + str(submission.upvote_ratio))
-
-                send_email("URL: " + str(submission.url) + " Source + Score: " + str(ExecuteCustomSQLQuery(str(rating_database_name),
-                """SELECT DISTINCT feed_sources, MAX(frequency) FROM frequency_table WHERE feed_sources='{fs}' 
-                GROUP BY feed_sources ORDER BY feed_sources DESC;""".format(
-                    fs=base_url), "Yes")))
+                    GROUP BY feed_sources ORDER BY feed_sources DESC;""".format(
+                        fs=base_url), "Yes")))
 
 if __name__ == '__main__':
 #Cashing thread calls are made for the local cashing idea that proves, for now, to be slower and thus inefficient
@@ -1252,5 +1406,7 @@ if __name__ == '__main__':
 # They should be launched in their own thread and they should not directly be interfering with the main operation modes.
 # Also it is possible to have a cluster of raspberry pi-s run different bots without interfering with each other.
 # Requires local read/write operations in a database
-    RatingCounter = ClusterableBots('RatingCounter', waitTime)
 
+# July 2019 update: ClusterableBots has a problematic thread management where new threads are created constantly
+# and never terminated. I have a theory that it shut downs the whole execution of the bot.
+    RatingCounter = ClusterableBots('RatingCounter', waitTime)

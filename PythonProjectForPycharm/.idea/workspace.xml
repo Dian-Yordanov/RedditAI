@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bb6ec46f-1e91-483f-8780-214db4c934d6" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/credentials - NEW.ini" beforeDir="false" afterPath="$PROJECT_DIR$/credentials - NEW.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/credentials.ini" beforeDir="false" afterPath="$PROJECT_DIR$/credentials.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/feed_sources_and_urls_database.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/feed_sources_and_urls_database.sqlite" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rating_sources_and_urls_database.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/rating_sources_and_urls_database.sqlite" afterDir="false" />
-    </list>
+    <list default="true" id="bb6ec46f-1e91-483f-8780-214db4c934d6" name="Default" comment="Even more work on cashing" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,110 +12,44 @@
     <SUITE FILE_PATH="coverage/PythonProjectForPycharm$bot.coverage" NAME="bot Coverage Results" MODIFIED="1533943511827" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PythonProjectForPycharm$test.coverage" NAME="test Coverage Results" MODIFIED="1533209602660" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="1479345356">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="2" />
-          <entry key="project.open.time.21" value="1" />
-          <entry key="project.open.time.22" value="1" />
-          <entry key="project.open.time.3" value="1" />
-          <entry key="project.opened" value="3" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="Bash" value="8" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="Bash" value="8" />
-        </counts>
-      </usages-collector>
-    </session>
-    <session id="961432398">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="36" />
-          <entry key="project.open.time.0" value="1" />
-          <entry key="project.open.time.10" value="1" />
-          <entry key="project.open.time.21" value="1" />
-          <entry key="project.open.time.25" value="1" />
-          <entry key="project.open.time.4" value="2" />
-          <entry key="project.open.time.5" value="8" />
-          <entry key="project.open.time.6" value="14" />
-          <entry key="project.open.time.7" value="5" />
-          <entry key="project.open.time.8" value="3" />
-          <entry key="project.opened" value="36" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="Bash" value="2" />
-          <entry key="py" value="11663" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="Bash" value="2" />
-          <entry key="Python" value="11663" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="credentials" value="1" />
-          <entry key="py" value="11" />
-          <entry key="sh" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="Bash" value="1" />
-          <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="11" />
-        </counts>
-      </usages-collector>
-    </session>
-    <session id="2005189230">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="9" />
-          <entry key="project.open.time.4" value="1" />
-          <entry key="project.open.time.5" value="4" />
-          <entry key="project.open.time.6" value="2" />
-          <entry key="project.open.time.8" value="1" />
-          <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="9" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="py" value="189" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="Python" value="189" />
-        </counts>
-      </usages-collector>
-    </session>
+  <component name="FavoritesManager">
+    <favorites_list name="PythonProjectForPycharm" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/bot.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="612">
-              <caret line="379" column="109" selection-start-line="379" selection-start-column="109" selection-end-line="379" selection-end-column="109" />
-              <folding>
-                <marker date="1561747498982" expanded="true" signature="18247:18252" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.85953176">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/bot.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="357">
+                  <caret line="1270" lean-forward="true" selection-start-line="1270" selection-end-line="1270" />
+                  <folding>
+                    <element signature="e#0#9#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/bot.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="272">
+                  <caret line="561" column="20" selection-start-line="561" selection-start-column="20" selection-end-line="561" selection-end-column="20" />
+                  <folding>
+                    <element signature="e#0#9#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -133,36 +61,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>id_column</find>
-      <find>StringTranslator</find>
-      <find>sys.argv</find>
-      <find>GoogleDriveDownloadClass</find>
-      <find>GetTargetRowFromDB</find>
-      <find>rating_boolean_ifsend</find>
-      <find>◘</find>
-      <find>CreateNewDatabase</find>
-      <find>PopulateSQLTableForBot</find>
-      <find>ExecuteCustomSQLQuery</find>
-      <find>GetTargetRowFromDBVersion2</find>
-      <find>size</find>
-      <find>send_email</find>
-      <find>ExecuteScriptCustomSQLQuery</find>
-      <find>RatingCounter</find>
-      <find>INSERT</find>
-      <find>ExecuteINSERT_INTO_SQL_withAtributes</find>
-      <find>execute</find>
-      <find>UNI</find>
-      <find>PRIMARY KEY</find>
+      <find>start()</find>
       <find>ClusterableBots</find>
-      <find>tech</find>
-      <find>HybridOperationMode</find>
-      <find>client_id</find>
-      <find>get_data_from_all_google_sources</find>
-      <find>cssClassToUse</find>
-      <find>AutomoderationCssClassCreator</find>
-      <find>Automoderation</find>
+      <find>print</find>
+      <find>RatingCounter</find>
+      <find>◘</find>
       <find>SubmitFunction</find>
-      <find>cssClass</find>
+      <find>GetTargetRowFromDB</find>
+      <find>ExecuteCustomSQLQuery</find>
+      <find>CreateNewDatabase</find>
+      <find>ExecuteScriptCustomSQLQuery</find>
+      <find>GetTargetRowFromDBfeed_sources</find>
+      <find>ExecuteUPDATE_SQL_Query</find>
+      <find>&lt;-- Specific URL (feed_urls)</find>
+      <find>databaseFeedURL</find>
+      <find>GetTargetRowFromDBfeed_urls</find>
+      <find>feed_urls</find>
+      <find>cashed_feed_urls</find>
+      <find>RatingCounter_Thread</find>
+      <find>PopulateSQLTableForBot</find>
+      <find>RunBot</find>
+      <find>RatingCounter_ClusterableBots</find>
+      <find>Thread</find>
+      <find>Thread id</find>
+      <find>PostingThread</find>
+      <find>id</find>
+      <find>id &quot;</find>
+      <find>https://www.gamersnexus</find>
+      <find>https://www.theguardian.com</find>
+      <find>https://www.debian.org/News/2019/20190706</find>
+      <find>databaseFeedURL 1</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -201,6 +129,7 @@
     <panes />
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -465,7 +394,6 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Bash.shellscript.sh" />
       <item itemvalue="Python.bot" />
       <item itemvalue="Python.configbot" />
       <item itemvalue="Python.sqlite" />
@@ -491,38 +419,65 @@
       <option name="presentableId" value="Default" />
       <updated>1532908647211</updated>
     </task>
+    <task id="LOCAL-00001" summary="Changing the exception thrown text and code instructions in case sources cannot be fetched form Google.">
+      <created>1562084439329</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1562084439329</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Even more work on cashing">
+      <created>1562102082224</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1562102082224</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="32" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.25" />
-      <window_info id="Structure" order="1" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info id="Structure" order="1" weight="0.24973656" />
+      <window_info id="Favorites" order="2" side_tool="true" weight="0.32982087" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Debug" order="2" weight="0.4" />
+      <window_info anchor="bottom" id="Debug" order="2" weight="0.4073673" />
       <window_info anchor="bottom" id="Cvs" order="3" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="5" />
+      <window_info anchor="bottom" id="TODO" order="5" weight="0.32936078" />
       <window_info anchor="bottom" id="Docker" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32936078" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32936078" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Python Console" order="10" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.32936078" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Data View" order="3" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" id="Run" order="5" weight="0.3576759" />
+      <window_info anchor="right" id="Run" order="5" weight="0.84808105" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="processedProjectFiles" value="true" />
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Changing the exception thrown text and code instructions in case sources cannot be fetched form Google." />
+    <MESSAGE value="Even more work on cashing" />
+    <option name="LAST_COMMIT_MESSAGE" value="Even more work on cashing" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/data.json" />
@@ -534,12 +489,26 @@
     <entry file="file://$PROJECT_DIR$/credentials" />
     <entry file="file://$PROJECT_DIR$/configbot.py" />
     <entry file="file://$PROJECT_DIR$/testClasses.py" />
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="387">
+          <caret line="1757" selection-start-line="1757" selection-end-line="1757" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/bot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="379" column="109" selection-start-line="379" selection-start-column="109" selection-end-line="379" selection-end-column="109" />
+        <state relative-caret-position="357">
+          <caret line="1270" lean-forward="true" selection-start-line="1270" selection-end-line="1270" />
           <folding>
-            <marker date="1561747498982" expanded="true" signature="18247:18252" ph="..." />
+            <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
