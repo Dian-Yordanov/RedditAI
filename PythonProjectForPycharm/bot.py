@@ -678,7 +678,9 @@ def ModerationThread(user_agent, client_id, client_secret, username, password, s
             for numIndex in coords:
                 if(iii==0):
                     submission = reddit.submission(id=coordinatedGeneratedById[numIndex])
-                    submission.delete()
+                    if submission.num_comments < 2:
+                        print(colored("deleting submission.url: " + str(submission.url),"red"))
+                        submission.delete()
                     # pass
                 if (iii >= 1):
                     # print "second+ - " + coordinatedGeneratedById[numIndex]
@@ -724,34 +726,34 @@ def ModerationThread(user_agent, client_id, client_secret, username, password, s
 #             with open('data1', 'a') as the_file:
 #                 the_file.write(str(submission1.url) + "\n")
 
-def AutomoderationCssClassCreator(typeOfPost):
-    # print typeOfPost
-    cssClassToUse = ""
-    if "kaldata.com" in typeOfPost:
-        cssClassToUse = "orange"
-    # elif typeOfPost.find("twitter.com") == 1:
-    elif "twitter.com" in typeOfPost:
-        cssClassToUse = "green"
-    # elif typeOfPost.find("boards.4chan.org") == 1:
-    elif "boards.4chan.org" in typeOfPost:
-        cssClassToUse = "red"
-    # elif typeOfPost.find("r/hearthstone") == 1:
-    elif "r/hearthstone" in typeOfPost:
-        cssClassToUse = "purple"
-    # elif typeOfPost.find("r/") == 1:
-    elif "r/" in typeOfPost:
-        cssClassToUse = "brown"
-    # elif typeOfPost.find("channelfireball.com") == 1:
-    elif "channelfireball.com" in typeOfPost:
-        cssClassToUse = "cyan"
-    elif "--^Tech^--" in typeOfPost:
-        cssClassToUse = "redcustom1"
-    elif "gaming" in typeOfPost:
-        cssClassToUse = "redcustom2"
-    else:
-        cssClassToUse = "custom"
-    # print cssClassToUse
-    return cssClassToUse
+# def AutomoderationCssClassCreator(typeOfPost):
+#     # print typeOfPost
+#     cssClassToUse = ""
+#     if "kaldata.com" in typeOfPost:
+#         cssClassToUse = "orange"
+#     # elif typeOfPost.find("twitter.com") == 1:
+#     elif "twitter.com" in typeOfPost:
+#         cssClassToUse = "green"
+#     # elif typeOfPost.find("boards.4chan.org") == 1:
+#     elif "boards.4chan.org" in typeOfPost:
+#         cssClassToUse = "red"
+#     # elif typeOfPost.find("r/hearthstone") == 1:
+#     elif "r/hearthstone" in typeOfPost:
+#         cssClassToUse = "purple"
+#     # elif typeOfPost.find("r/") == 1:
+#     elif "r/" in typeOfPost:
+#         cssClassToUse = "brown"
+#     # elif typeOfPost.find("channelfireball.com") == 1:
+#     elif "channelfireball.com" in typeOfPost:
+#         cssClassToUse = "cyan"
+#     elif "--^Tech^--" in typeOfPost:
+#         cssClassToUse = "redcustom1"
+#     elif "gaming" in typeOfPost:
+#         cssClassToUse = "redcustom2"
+#     else:
+#         cssClassToUse = "custom"
+#     # print cssClassToUse
+#     return cssClassToUse
 
 #The functions bellow are here just in case read/write from the device is implemented as the main way of comparing
 # new posts to old in order to search for dublication
@@ -1407,6 +1409,5 @@ if __name__ == '__main__':
 # Also it is possible to have a cluster of raspberry pi-s run different bots without interfering with each other.
 # Requires local read/write operations in a database
 
-# July 2019 update: ClusterableBots has a problematic thread management where new threads are created constantly
-# and never terminated. I have a theory that it shut downs the whole execution of the bot.
-    RatingCounter = ClusterableBots('RatingCounter', waitTime)
+# July 2019 update 2: Commended mainly in order of optimisation
+#     RatingCounter = ClusterableBots('RatingCounter', waitTime)
