@@ -8,7 +8,7 @@ six==1.11.0
 prawcore==1.0.0
 praw==6.0.0
 idna==2.7
-certifi==2018.4.16
+certifi==2022.12.7
 html5lib==1.0.1
 beautifulsoup4==4.7.1
 termcolor==1.1.0
